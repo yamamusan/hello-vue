@@ -19,11 +19,6 @@ import commonHeader from './components/CommonHeader'
 
 export default {
   name: 'App',
-  data () {
-    return {
-      greet: '今日は世界！！'
-    }
-  },
   components: {
     commonHeader // タグ指定時はケバブケースで。
   }
