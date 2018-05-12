@@ -1,0 +1,117 @@
+◆HTML
+<div id="demo">
+  <ul>
+    <member-list></member-list>
+  </ul>
+</div>
+
+
+◆JS
+var member = Vue.extend({
+	props: ['member', 'index'],
+	template: `
+      <li>
+       <input type="button" value="削除" v-on:click="deleteMember(member.id)" />
+       {{member.id}}：{{member.name}}は{{member.age}}歳。
+    </li>
+	`,
+  methods: {
+    deleteMember: function (index) {
+    	this.$emit('delete-member', this.myValue);
+    }
+  }  
+});
+
+var memberList = Vue.extend({
+  template: `
+  	<div>
+      <div>
+        <member v-for="(member, index) in members" :member="member" :index="index" @delete-member="deleteMember(member.id)"></member>
+      </div>
+
+      <div>
+        <div>名前:<input type="text" v-model="name"></div>
+        <div>年齢:<input type="number" v-model="age"></div>
+        <div>
+          <input class="square_btn" type="button" value="追加やで" @click="addMember" />
+        </div>
+      </div>
+    </div>
+  `,
+  data: function () {
+    return {
+			members: [
+        {
+          id: 1,
+          name: "yamada",
+          age: 30
+        },
+        {
+        	id: 2,
+          name: "suzuki",
+          age: 32
+        }
+    	],
+      name : "",
+      age : ""
+    }
+  },
+  methods: {
+    addMember: function (event) {
+      var newId = this.members[this.members.length -1].id + 1;
+      this.members.push({id: newId, name: this.name, age: this.age});
+    },
+    deleteMember: function (id) {
+    	var deleteIdx = 0;
+      this.members.some(function(member, idx){
+        if(member.id == id){
+          deleteIdx = idx;
+          return true;
+        }
+      });
+			this.members.splice(deleteIdx, 1);
+    }
+  },
+  components: {
+    'member': member
+  }
+});
+
+new Vue({
+  el: '#demo',
+  components: {
+    'member-list': memberList
+  }
+})
+
+◆CSS
+div .list {
+  padding-top: 3px
+}
+
+div .block {
+  padding-top: 15px
+}
+
+.error {
+  color: red !important;
+}
+
+.square_btn{
+    margin-top: 10px;
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    background: #668ad8;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
+.square_btn:active {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;/*線を消す*/
+}
+
+

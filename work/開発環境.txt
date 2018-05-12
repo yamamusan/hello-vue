@@ -1,0 +1,98 @@
+参考：https://qiita.com/567000/items/dde495d6a8ad1c25fa43
+
+# nodejsとnpmをインストール
+https://nodejs.org/ja/ より8.9.4をダウンロード＆インストール
+
+node -v
+v8.9.4
+
+npm -v
+5.6.0
+
+# vue-cliをインストール
+npm install -g vue-cli
+npm install -g babel-cli
+
+# プロジェクトを作成(webpackプロジェクト)
+cd /d D:\randd\vuejs
+vue init webpack hello-vue
+※質問は全部デフォルトでOK.
+
+# パッケージをインストール
+cd hello-vue
+npm install
+npm run dev
+
+# ビルドすると。。。
+npm run build
+↓
+./distにindex.htmlとcssやjsがまとまったものができる。
+これが正体だ！！
+===============
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>hello-vue</title>
+  <link href=/static/css/app.cca059254702f9ed953b7df749673cf4.css rel=stylesheet>
+</head>
+<body>
+  <div id=app></div>
+  <script type=text/javascript src=/static/js/manifest.2ae2e69a05c33dfc65f8.js></script> //★
+  <script type=text/javascript src=/static/js/vendor.5973cf24864eecc78c48.js></script>   //★
+  <script type=text/javascript src=/static/js/app.f16ac5c624284d30f5af.js></script>      //★
+</body>
+</html>
+===============
+
+# ひな形プロジェクトの考察
+①ルート直下のindex.html
+「/」でアクセスされた際に最初に呼ばれる
+   <div id="app"></div>  ←ここが置換されるイメージ
+②src/main.js
+誰が読んでるか知らんが、以下が実行されルートインスタンスが作られる。
+================
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+
+new Vue({
+  el: '#app', // id="app"にマウント
+  router,     // import router from './router' が効いている
+  components: { App }, // App.vueを読み込む
+  template: '<App/>'   // よくわからん
+})
+================
+③src/App.vue(.vueファイルには、HTMLのテンプレートとスタイルを一緒にかいておける。ここは全アプリ共通的な位置づけかな？)
+================
+<template>
+  <div id="app">
+    <img src="./assets/logo.png">
+    <router-view/>  // <router-view> コンポーネントは与えられたパスに対してマッチしたコンポーネントを描画する関数型コンポーネントです。
+                    // 要はここにルーティングされたコンポーネントが読み込まれるんだと思う。/だったら、Hellow.vueみたいな
+  </div>
+</template>
+
+<script>
+export default {  // export defaultをつけるとimportしたときの名前でここにアクセスされる。
+  name: 'App'     // (名前付きExportの場合はその名前でインポートしてくる必要があるが、こっちのほうは名前は多分なんでもよい)
+}
+</script>
+
+<style>
+#app {           // ってことはここは全体に聞く設定ってことかな???
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+================
+
+
+
+
+

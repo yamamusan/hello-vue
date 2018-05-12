@@ -1,0 +1,92 @@
+◆HTML
+<div id="demo">
+
+  <p>{{ message }}</p>
+  <input v-model="message">
+  <p style="color:grey" v-bind:class="{'error': !messageInputed}">入力してください</p>
+  
+  <p>{{ priceWithTax }}</p>
+  <input v-model.lazy="price">
+  
+  <div class="block">
+    <input id="dispCheck" type="checkbox" v-model="show">
+    <label for="dispCheck">表示？</label>
+  </div>
+  
+  <div v-if="show">
+    <div class="list">
+      <li v-for="member in members" >
+        {{ member.name }} は {{ member.age }}歳
+      </li>
+    </div>
+  </div>
+  
+  <input class="square_btn" type="button" value="金額算出" v-on:click="submit" />
+  
+</div>
+
+
+
+◆JS
+new Vue({
+  el: '#demo',
+  data: {
+    message: 'hello world!',
+    price: 100,
+    show: true,
+    members: [
+			{
+      	name: "yamada",
+        age: 30
+      },
+			{
+      	name: "suzuki",
+        age: 32
+      }
+    ]
+  },
+  computed: {
+    priceWithTax: function() {
+      return this.price * 1.08;
+    },
+    messageInputed: function () {
+      return this.message.length > 0;
+    }
+  },
+  methods: {
+    submit: function (event) {
+      alert('金額は' + this.priceWithTax + "です。");
+    }
+  }  
+})
+
+
+◆CSS
+div .list {
+  padding-top: 3px
+}
+
+div .block {
+  padding-top: 15px
+}
+
+.error {
+  color: red !important;
+}
+
+.square_btn{
+    margin-top: 10px;
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    background: #668ad8;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
+.square_btn:active {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;/*線を消す*/
+}
